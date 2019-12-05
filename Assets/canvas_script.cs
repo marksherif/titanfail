@@ -1,0 +1,95 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using UnityStandardAssets.CrossPlatformInput;
+
+public class canvas_script : MonoBehaviour
+{
+    public GameObject main_menu_panel;
+    public GameObject options_panel;
+    public GameObject loadout_panel;
+    public GameObject pause_panel;
+    public GameObject player_hud_panel;
+    public GameObject titan_hud_panel;
+    public GameObject game_over_panel;
+    public Slider volume_slider;
+
+    private bool player_hud_before_pause;
+    private EventSystem event_system;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Time.timeScale = 0f;
+        main_menu_panel.SetActive(true);
+        event_system = FindObjectOfType<EventSystem>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (CrossPlatformInputManager.GetButtonDown("Pause"))
+        {
+            onPause();
+        }
+    }
+
+    public void onStart()
+    {
+        // TODO Uncomment this when loadout panel and logic are implemented
+        // loadout_panel.SetActive(true);
+        main_menu_panel.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void onPause()
+    {
+        pause_panel.SetActive(true);
+        if (player_hud_panel.activeSelf)
+            player_hud_before_pause = true;
+        else
+            player_hud_before_pause = false;
+        player_hud_panel.SetActive(false);
+        titan_hud_panel.SetActive(false);
+        Time.timeScale = 0f;
+        // TODO Fix event system not picking up mouse location and clicks
+    }
+
+    public void OnResume()
+    {
+        if (player_hud_before_pause)
+            player_hud_panel.SetActive(true);
+        else
+            titan_hud_panel.SetActive(true);
+        pause_panel.SetActive(false);
+        Time.timeScale = 1f;
+    }
+    public void onOptions()
+    {
+        options_panel.SetActive(true);
+        main_menu_panel.SetActive(false);
+    }
+    public void onBackFromLoadout()
+    {
+        main_menu_panel.SetActive(true);
+        loadout_panel.SetActive(false);
+    }
+
+    public void onBackFromOptions()
+    {
+        main_menu_panel.SetActive(true);
+        options_panel.SetActive(false);
+    }
+
+    public void OnVolumeChange()
+    {
+        AudioListener.volume = volume_slider.value;
+    }
+
+    public void onQuit()
+    {
+        Application.Quit();
+    }
+}
