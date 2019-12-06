@@ -16,6 +16,9 @@ public class fire_weapon : MonoBehaviour
     public AudioClip gun_reload_audio1;
     public AudioClip gun_reload_audio2;
 
+    public GameObject player_hud_panel;
+    public GameObject titan_hud_panel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,14 +31,14 @@ public class fire_weapon : MonoBehaviour
 
     {
         ammo_count.text = current_ammo + "/" + ammo_capacity;
-        if (CrossPlatformInputManager.GetButton("Fire1") && current_ammo > 0)
+        if (CrossPlatformInputManager.GetButton("Fire1") && current_ammo > 0 && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf))
         {
             anim.SetBool("fire", true);
             if(!audio_source_gun.isPlaying)
                 audio_source_gun.PlayOneShot(gun_fire_audio);
         }
 
-        if (current_ammo == 0 || (CrossPlatformInputManager.GetButtonDown("Reload")  && current_ammo < ammo_capacity))
+        if ((current_ammo == 0 || (CrossPlatformInputManager.GetButtonDown("Reload")  && current_ammo < ammo_capacity)) && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf))
         {
             anim.SetTrigger("reload");
             if (!audio_source_gun.isPlaying)

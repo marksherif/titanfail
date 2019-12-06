@@ -624,6 +624,8 @@ MonoBehaviour:
   gun_fire_audio: {fileID: 8300000, guid: 93b7dd16af071064b8715eae4b1c9bd7, type: 3}
   gun_reload_audio1: {fileID: 8300000, guid: f6727888a13262d44acfcc216821d28b, type: 3}
   gun_reload_audio2: {fileID: 8300000, guid: d2761fe8a948b7a4ab906d3978012983, type: 3}
+  player_hud_panel: {fileID: 1789912204}
+  titan_hud_panel: {fileID: 1263133840}
 --- !u!95 &420550034
 Animator:
   serializedVersion: 3
@@ -1101,6 +1103,7 @@ MonoBehaviour:
     smooth: 1
     smoothTime: 18
     lockCursor: 1
+    m_cursorIsLocked: 1
   advancedSettings:
     groundCheckDistance: 0.1
     stickToGroundHelperDistance: 0.6
@@ -2384,7 +2387,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &1273188237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2495,7 +2498,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1344205979}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2116591921}
+        m_MethodName: onMainMenuFromPause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1344205979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4085,6 +4099,7 @@ MonoBehaviour:
   player_hud_panel: {fileID: 1789912204}
   titan_hud_panel: {fileID: 1263133840}
   game_over_panel: {fileID: 551271047}
+  player: {fileID: 702001780}
   volume_slider: {fileID: 1230142938}
 --- !u!1 &1783452561490637
 GameObject:
