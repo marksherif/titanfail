@@ -81,21 +81,26 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
         public Camera cam;
+        public GameObject weapon1;
+        public GameObject weapon2;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
+
 
 
         private Rigidbody m_RigidBody;
         private CapsuleCollider m_Capsule;
         private float m_YRotation;
         private Vector3 m_GroundContactNormal;
-        private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
+        private bool m_Jump,m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
+        private bool m_changeWeaponValue = true;
         private int jump_count = 0;
 
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] public AudioClip m_LandSound;           // the sound played when character touches back on ground.
+        [SerializeField] public AudioClip m_ChangeWeaponSound;   // the sound played when character toggles between 2 weapons.
         public AudioSource m_AudioSource1;
         public AudioSource m_AudioSource2;
 
@@ -188,6 +193,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jump = true;
             }
+
+
+            if (CrossPlatformInputManager.GetButtonDown("ChangeWeapon")) 
+            {
+                m_changeWeaponValue = !m_changeWeaponValue;
+                weapon1.SetActive(m_changeWeaponValue);
+                weapon2.SetActive(!m_changeWeaponValue);
+            }
+
         }
 
 

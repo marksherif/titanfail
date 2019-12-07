@@ -7,7 +7,7 @@ using UnityStandardAssets.CrossPlatformInput;
 public class fire_weapon : MonoBehaviour
 {
     public Animator anim;
-    public int ammo_capacity = 30;
+    public int ammo_capacity;
     public int current_ammo;
     public Text ammo_count;
     public GameObject bullet;
