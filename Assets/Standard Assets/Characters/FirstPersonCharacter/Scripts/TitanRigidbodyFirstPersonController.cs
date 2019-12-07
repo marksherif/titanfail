@@ -98,7 +98,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         public Text dash_text;
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-        [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
+        [SerializeField] public AudioClip m_Dash;           // the sound played when character leaves the ground.
         [SerializeField] public AudioClip m_LandSound;           // the sound played when character touches back on ground.
         public AudioSource m_AudioSource1;
         public AudioSource m_AudioSource2;
@@ -110,9 +110,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //m_NextStep = m_StepCycle + .5f;
         }
 
-        private void PlayJumpSound()
+        private void PlayDashSound()
         {
-            m_AudioSource1.clip = m_JumpSound;
+            m_AudioSource1.clip = m_Dash;
             m_AudioSource1.Play();
         }
 
@@ -234,6 +234,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 {
                     dash_count -= 1;
                     m_RigidBody.AddForce(desiredMove * SlopeMultiplier()*70, ForceMode.Impulse);
+                    PlayDashSound();
                     if (dash_count == 0)
                     {
                         StartCoroutine(RefillDash(5));
@@ -253,7 +254,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
                     m_Jumping = true;
                     jump_count += 1;
-                    PlayJumpSound();
+                    PlayDashSound();
                 }
 
                 if (!m_Jumping && Mathf.Abs(input.x) < float.Epsilon && Mathf.Abs(input.y) < float.Epsilon && m_RigidBody.velocity.magnitude < 1f)
@@ -270,7 +271,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
                     m_Jumping = true;
                     jump_count += 1;
-                    PlayJumpSound();
+                    PlayDashSound();
                 }
                 else
                 {
