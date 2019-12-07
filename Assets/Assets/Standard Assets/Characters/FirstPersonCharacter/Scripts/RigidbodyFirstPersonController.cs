@@ -200,6 +200,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_changeWeaponValue = !m_changeWeaponValue;
                 weapon1.SetActive(m_changeWeaponValue);
                 weapon2.SetActive(!m_changeWeaponValue);
+                weapon1.transform.localRotation = Quaternion.identity;
+                weapon2.transform.localRotation = Quaternion.identity;
                 m_AudioSource1.clip = m_ChangeWeaponSound;
                 m_AudioSource1.Play();
             }
