@@ -31,13 +31,24 @@ public class fire_weapon : MonoBehaviour
 
     {
         ammo_count.text = current_ammo + "/" + ammo_capacity;
-        if (CrossPlatformInputManager.GetButton("Fire1") && current_ammo > 0 && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf))
+
+        // Automatic fire (fires as long as you press the fire button)
+        if (CrossPlatformInputManager.GetButton("Fire1") && current_ammo > 0 && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf) && gameObject.tag != "Shotgun")
         {
             anim.SetBool("fire", true);
             if(!audio_source_gun.isPlaying)
                 audio_source_gun.PlayOneShot(gun_fire_audio);
         }
 
+        // Shotgun fire (1 shot per unique click)
+        if (CrossPlatformInputManager.GetButtonDown("Fire1") && current_ammo > 0 && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf) && gameObject.tag == "Shotgun")
+        {
+            anim.SetBool("fire", true);
+            if (!audio_source_gun.isPlaying)
+                audio_source_gun.PlayOneShot(gun_fire_audio);
+        }
+
+        // Reload currently equipped weapon
         if ((current_ammo == 0 || (CrossPlatformInputManager.GetButtonDown("Reload")  && current_ammo < ammo_capacity)) && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf))
         {
             anim.SetTrigger("reload");
