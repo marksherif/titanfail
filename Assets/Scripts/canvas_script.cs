@@ -17,16 +17,27 @@ public class canvas_script : MonoBehaviour
     public GameObject titan_hud_panel;
     public GameObject game_over_panel;
     public GameObject player;
+    public Toggle toggle;
     public Slider volume_slider;
+    public AudioClip main_menu_music;
+    
+
 
     private bool player_hud_before_pause;
     private EventSystem event_system;
+    private AudioSource main_menu_audio_source;
+
 
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 0f;
         main_menu_panel.SetActive(true);
+        main_menu_audio_source = GetComponent<AudioSource>();
+        if (toggle.isOn)
+        {
+            main_menu_audio_source.PlayOneShot(main_menu_music);
+        }
         event_system = FindObjectOfType<EventSystem>();
     }
 
@@ -37,6 +48,13 @@ public class canvas_script : MonoBehaviour
         {
             onPause();
         }
+        if (!toggle.isOn)
+        {
+            main_menu_audio_source.Stop();
+        }
+       
+           
+        
     }
 
     public void onStart()
@@ -47,10 +65,12 @@ public class canvas_script : MonoBehaviour
         titan_hud_panel.SetActive(true);
         main_menu_panel.SetActive(false);
         Time.timeScale = 1f;
+        main_menu_audio_source.Stop();
     }
 
     public void onPause()
     {
+        
         player.GetComponent<RigidbodyFirstPersonController>().mouseLook.SetCursorLock(false);
         //event_system.currentInputModule()
         event_system.UpdateModules();
@@ -62,6 +82,11 @@ public class canvas_script : MonoBehaviour
         player_hud_panel.SetActive(false);
         titan_hud_panel.SetActive(false);
         Time.timeScale = 0f;
+        if (toggle.isOn)
+        {
+            main_menu_audio_source.PlayOneShot(main_menu_music);
+        }
+
     }
 
     public void OnResume()
@@ -73,6 +98,7 @@ public class canvas_script : MonoBehaviour
             titan_hud_panel.SetActive(true);
         pause_panel.SetActive(false);
         Time.timeScale = 1f;
+        main_menu_audio_source.Stop();
     }
     public void onOptions()
     {
