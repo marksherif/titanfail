@@ -96,6 +96,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jump,m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
         private bool m_changeWeaponValue = true;
         private int jump_count = 0;
+        private int titanFallMeter;
 
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
@@ -182,7 +183,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
             mouseLook.Init (transform, cam.transform);
-        }
+            titanFallMeter = 0;                          //a player intially has an empty titanfall meter
+          }
 
 
         private void Update()
