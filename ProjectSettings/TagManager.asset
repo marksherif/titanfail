@@ -6,8 +6,11 @@ TagManager:
   tags:
   - Wall
   - Bullet
-  - Fire
+
+
   - Shotgun
+  - EnemyBullet
+
   layers:
   - Default
   - TransparentFX

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
 
 namespace UnityStandardAssets.Characters.FirstPerson
@@ -97,6 +98,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_changeWeaponValue = true;
         private int jump_count = 0;
         private int titanFallMeter;
+        private float health = 100;
+        public Image health_bar;
 
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
@@ -208,6 +211,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_AudioSource1.Play();
             }
 
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "EnemyBullet")
+            {
+                health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
+                Destroy(collision.gameObject);
+                health_bar.fillAmount = health / 100f;
+                if (health <= 0)
+                {
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().OnGameOver();
+                }
+
+            }
         }
 
 
