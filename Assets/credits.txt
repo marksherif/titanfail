@@ -1,4 +1,3 @@
-So you have to specify the author in your project:
 Music from https://filmmusic.io
 "Sings In The Fields - Creepy Horror Orchestra" by Rafael Krux (https://www.orchestralis.net/)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
