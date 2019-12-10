@@ -30,7 +30,7 @@ public class fire_weapon : MonoBehaviour
     void Update()
 
     {
-        ammo_count.text = current_ammo + "/" + ammo_capacity;
+        ammo_count.text = gameObject.name + " - " + current_ammo + "/" + ammo_capacity;
 
         // Automatic fire (fires as long as you press the fire button)
         if (CrossPlatformInputManager.GetButton("Fire1") && current_ammo > 0 && (player_hud_panel.activeSelf || titan_hud_panel.activeSelf) && gameObject.tag != "Shotgun")
@@ -63,7 +63,11 @@ public class fire_weapon : MonoBehaviour
         var clone = Instantiate(bullet, transform.position, transform.rotation);
         clone.SetActive(true);
         clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
-        Destroy(clone, 3.0f);
+        // Represents the range of each weapon
+        if (gameObject.name == "Shotgun")
+            Destroy(clone, 0.08f);
+        if (gameObject.name == "AssaultRifle")
+            Destroy(clone, 0.2f);
     }
 
     public void fireAnimationEnded()
