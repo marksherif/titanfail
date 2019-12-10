@@ -48,13 +48,20 @@ public class canvas_script : MonoBehaviour
         {
             onPause();
         }
-        if (!toggle.isOn)
-        {
-            main_menu_audio_source.Stop();
-        }
+       
        
            
         
+    }
+
+    public void onToggleUpdate()
+    {
+        if (toggle.isOn)
+        {
+            main_menu_audio_source.PlayOneShot(main_menu_music);
+        }
+        else
+            main_menu_audio_source.Stop();
     }
 
     public void onStart()
@@ -115,6 +122,7 @@ public class canvas_script : MonoBehaviour
     {
         main_menu_panel.SetActive(true);
         options_panel.SetActive(false);
+       
     }
 
 
