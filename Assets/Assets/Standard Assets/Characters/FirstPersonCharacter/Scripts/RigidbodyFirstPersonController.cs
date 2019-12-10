@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityStandardAssets.CrossPlatformInput;
@@ -194,6 +195,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             RotateView();
 
+            health_bar.fillAmount = health / 100f;
+
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
                 m_Jump = true;
@@ -219,13 +222,25 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
                 Destroy(collision.gameObject);
-                health_bar.fillAmount = health / 100f;
+                StopAllCoroutines();
+                StartCoroutine(RefillHealth(3));
+
                 if (health <= 0)
                 {
                     GameObject.Find("Canvas").GetComponent<canvas_script>().OnGameOver();
                 }
 
             }
+        }
+
+        IEnumerator RefillHealth(float time)
+        {
+            yield return new WaitForSeconds(time);
+            health += 5;
+            if (health >= 100)
+                health = 100;
+            else
+                StartCoroutine(RefillHealth(1));
         }
 
 
