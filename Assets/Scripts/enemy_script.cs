@@ -8,6 +8,7 @@ public class enemy_script : MonoBehaviour
 
     public GameObject bullet;
     public Image health_bar;
+    public GameObject explosion;
     private bool player_in_region;
     private float health = 100;
 
@@ -29,7 +30,11 @@ public class enemy_script : MonoBehaviour
             health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
             Destroy(collision.gameObject);
             if (health <= 0)
-                Destroy(gameObject);
+            {
+                explosion.SetActive(true);
+                StartCoroutine(DestroyOnDying(0.5f));
+            }
+                
         }
     }
 
@@ -67,5 +72,11 @@ public class enemy_script : MonoBehaviour
         {
             StartCoroutine(ShootAtPlayer(1.7f));
         }
+    }
+
+    IEnumerator DestroyOnDying(float time)
+    {
+        yield return new WaitForSeconds(time);
+        Destroy(gameObject);
     }
 }
