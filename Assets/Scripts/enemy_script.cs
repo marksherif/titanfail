@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class enemy_script : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class enemy_script : MonoBehaviour
     public Image health_bar;
     public GameObject explosion;
     private bool player_in_region;
-    private float health = 100;
+    public float health = 100;
 
     void Start()
     {
@@ -77,6 +78,17 @@ public class enemy_script : MonoBehaviour
     IEnumerator DestroyOnDying(float time)
     {
         yield return new WaitForSeconds(time);
+        GameObject player = GameObject.Find("Player");
+        RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
+        if (gameObject.tag == "EnemyTitan")
+            playerScript.titanFallMeter += 50;
+      
+        if (gameObject.tag == "EnemyPilot")
+            playerScript.titanFallMeter += 10;
+
+        if (playerScript.titanFallMeter > 100)
+            playerScript.titanFallMeter = 100;
+
         Destroy(gameObject);
     }
 }

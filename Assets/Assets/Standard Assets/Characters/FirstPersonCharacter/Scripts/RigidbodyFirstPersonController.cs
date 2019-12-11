@@ -98,9 +98,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_Jump,m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
         private bool m_changeWeaponValue = true;
         private int jump_count = 0;
-        private int titanFallMeter;
         private float health = 100;
         public Image health_bar;
+        public int titanFallMeter;
 
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.

@@ -6,11 +6,11 @@ TagManager:
   tags:
   - Wall
   - Bullet
-
-
   - Shotgun
   - EnemyBullet
-
+  - Fire
+  - EnemyTitan
+  - EnemyPilot
   layers:
   - Default
   - TransparentFX
