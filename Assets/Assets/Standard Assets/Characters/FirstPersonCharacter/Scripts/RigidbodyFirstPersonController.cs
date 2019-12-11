@@ -85,6 +85,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public Camera cam;
         public GameObject weapon1;
         public GameObject weapon2;
+        public GameObject Titan;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
@@ -97,6 +98,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Vector3 m_GroundContactNormal;
         private bool m_Jump,m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
         private bool m_changeWeaponValue = true;
+        private bool titan_deployed = false;
         private int jump_count = 0;
         private float health = 100;
         public Image health_bar;
@@ -217,6 +219,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 weapon2.transform.localRotation = Quaternion.identity;
                 m_AudioSource1.clip = m_ChangeWeaponSound;
                 m_AudioSource1.Play();
+            }
+
+
+            if (CrossPlatformInputManager.GetButtonDown("TitanFall") && titanFallMeter == 100f && !titan_deployed)
+            {
+                var intial_titan_height = transform.position.y + 10;
+                var z = transform.position.z + 5;
+                var clone = Instantiate(Titan, new Vector3(transform.position.x, intial_titan_height, z), transform.rotation);
+                clone.SetActive(true);
+                titan_deployed = true;
+                titanFallMeter = 0;
             }
 
         }
