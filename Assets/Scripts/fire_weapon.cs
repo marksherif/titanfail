@@ -60,14 +60,30 @@ public class fire_weapon : MonoBehaviour
 
     public void fire()
     {
-        var clone = Instantiate(bullet, transform.position, transform.rotation);
-        clone.SetActive(true);
-        clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
+        if (gameObject.name == "RocketLauncher")
+        {
+            var clone = Instantiate(bullet, bullet.transform.position, bullet.transform.rotation);
+            clone.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            clone.SetActive(true);
+            clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
+            Destroy(clone, 1.0f);
+
+        }
         // Represents the range of each weapon
         if (gameObject.name == "Shotgun")
+        {
+            var clone = Instantiate(bullet, transform.position, transform.rotation);
+            clone.SetActive(true);
+            clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
             Destroy(clone, 0.08f);
+        }
         if (gameObject.name == "AssaultRifle")
+        {
+            var clone = Instantiate(bullet, transform.position, transform.rotation);
+            clone.SetActive(true);
+            clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
             Destroy(clone, 0.2f);
+        }
     }
 
     public void fireAnimationEnded()

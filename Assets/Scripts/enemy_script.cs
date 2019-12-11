@@ -11,8 +11,8 @@ public class enemy_script : MonoBehaviour
     public Image health_bar;
     public GameObject explosion;
     private bool player_in_region;
-    private float health;
     public float initial_enemy_health;
+    public float health;
 
     void Start()
     {
@@ -50,7 +50,7 @@ public class enemy_script : MonoBehaviour
                 if (playerScript.titanFallMeter > 100)
                     playerScript.titanFallMeter = 100;
             }
-                
+      
         }
     }
 

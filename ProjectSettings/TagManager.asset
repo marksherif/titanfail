@@ -11,6 +11,7 @@ TagManager:
   - Fire
   - EnemyTitan
   - EnemyPilot
+  - Rocket
   layers:
   - Default
   - TransparentFX
