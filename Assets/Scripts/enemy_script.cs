@@ -32,8 +32,13 @@ public class enemy_script : MonoBehaviour
             Destroy(collision.gameObject);
             if (health <= 0)
             {
-                explosion.SetActive(true);
-                StartCoroutine(DestroyOnDying(0.5f));
+                if (gameObject.name == "EnemyTitan")
+                {
+                    explosion.SetActive(true);
+                    StartCoroutine(DestroyOnDying(0.5f));
+                }
+                else
+                    Destroy(gameObject);
             }
                 
         }
