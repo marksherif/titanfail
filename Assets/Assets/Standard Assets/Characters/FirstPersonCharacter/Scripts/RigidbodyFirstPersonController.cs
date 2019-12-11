@@ -189,6 +189,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Capsule = GetComponent<CapsuleCollider>();
             mouseLook.Init (transform, cam.transform);
             titanFallMeter = 0;                          //a player intially has an empty titanfall meter
+            weapon1.SetActive(true);
           }
 
 
