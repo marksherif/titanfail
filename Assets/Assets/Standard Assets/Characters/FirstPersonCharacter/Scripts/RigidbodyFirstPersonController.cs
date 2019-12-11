@@ -100,7 +100,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private int jump_count = 0;
         private float health = 100;
         public Image health_bar;
-        public int titanFallMeter;
+        public Image titan_fall_meter_bar;
+        public float titanFallMeter;
 
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
         [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
@@ -196,6 +197,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
             RotateView();
 
             health_bar.fillAmount = health / 100f;
+
+            titan_fall_meter_bar.fillAmount = titanFallMeter / 100f;
+
+
 
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
