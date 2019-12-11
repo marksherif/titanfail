@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class enemy_script : MonoBehaviour
 {
@@ -10,17 +11,18 @@ public class enemy_script : MonoBehaviour
     public Image health_bar;
     public GameObject explosion;
     private bool player_in_region;
-    private float health = 100;
+    private float health;
+    public float initial_enemy_health;
 
     void Start()
     {
-        
+        health = initial_enemy_health;
     }
 
     // Update is called once per frame
     void Update()
     {
-        health_bar.fillAmount = health / 100f;
+        health_bar.fillAmount = health / initial_enemy_health;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -29,15 +31,24 @@ public class enemy_script : MonoBehaviour
         {
             health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
             Destroy(collision.gameObject);
+            GameObject player = GameObject.Find("Player");
+            RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
             if (health <= 0)
             {
                 if (gameObject.name == "EnemyTitan")
                 {
                     explosion.SetActive(true);
                     StartCoroutine(DestroyOnDying(0.5f));
+                    playerScript.titanFallMeter += 50;
+
                 }
                 else
+                {
                     Destroy(gameObject);
+                    playerScript.titanFallMeter += 10;
+                }
+                if (playerScript.titanFallMeter > 100)
+                    playerScript.titanFallMeter = 100;
             }
                 
         }
