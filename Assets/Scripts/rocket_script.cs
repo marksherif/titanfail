@@ -59,7 +59,7 @@ public class rocket_script : MonoBehaviour
                 RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
                 if (health <= 0)
                 {
-                    if (hitColliders[i].gameObject.name == "EnemyTitan")
+                    if (hitColliders[i].gameObject.CompareTag("EnemyTitan"))
                     {
                         hitColliders[i].gameObject.transform.GetChild(0).gameObject.SetActive(true);
                         StartCoroutine(DestroyOnDying(0.5f, hitColliders[i].gameObject));
