@@ -32,7 +32,7 @@ public class enemy_script : MonoBehaviour
         {
             health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
             Destroy(collision.gameObject);
-            GameObject player = GameObject.Find("Player");
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
             RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
             if (health <= 0)
             {
