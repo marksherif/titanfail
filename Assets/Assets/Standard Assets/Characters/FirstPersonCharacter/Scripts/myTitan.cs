@@ -9,6 +9,9 @@ public class myTitan : MonoBehaviour
    // public Text embark_text;
     public GameObject TitanFPS;
     public GameObject PlayerFPS;
+
+    public Text embark_text;
+    private bool can_embark;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,15 +27,35 @@ public class myTitan : MonoBehaviour
             Destroy(GetComponent<Rigidbody>());
         }
 
-       /* if (CrossPlatformInputManager.GetButtonDown("TitanEmbark") && embark_text.text == "Press 'E' to embark the titan")
+        if (CrossPlatformInputManager.GetButtonDown("TitanEmbark") && can_embark)
         {
+            embark_text.text = "";
             TitanFPS.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + 5, gameObject.transform.position.z);
             TitanFPS.transform.rotation = gameObject.transform.rotation;
             Destroy(gameObject);
             PlayerFPS.SetActive(false);
             TitanFPS.SetActive(true);
-        }*/
+        }
     }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Player")) {
+            embark_text.text = "Press 'E' to embark";
+            can_embark = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.gameObject.CompareTag("Player"))
+        {
+
+            embark_text.text = "";
+            can_embark = false;
+        }
+    }
+
     void OnCollisionEnter(Collision theCollision)
     {
         if (theCollision.gameObject.name == "Plane")
