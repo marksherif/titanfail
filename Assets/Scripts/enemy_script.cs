@@ -13,6 +13,7 @@ public class enemy_script : MonoBehaviour
     private bool player_in_region;
     public float initial_enemy_health;
     public float health;
+    private bool living = true;
 
     void Start()
     {
@@ -35,17 +36,18 @@ public class enemy_script : MonoBehaviour
             RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
             if (health <= 0)
             {
-                if (gameObject.name == "EnemyTitan")
+                if (gameObject.CompareTag("EnemyTitan") && living)
                 {
                     explosion.SetActive(true);
                     StartCoroutine(DestroyOnDying(0.5f));
-                    playerScript.titanFallMeter += 50;
+                    playerScript.titanFallMeter += 50f;
+                    living = false;
 
                 }
-                else
+                else if (gameObject.CompareTag("EnemyPilot"))
                 {
                     Destroy(gameObject);
-                    playerScript.titanFallMeter += 10;
+                    playerScript.titanFallMeter += 10f;
                 }
                 if (playerScript.titanFallMeter > 100)
                     playerScript.titanFallMeter = 100;
