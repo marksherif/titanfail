@@ -60,13 +60,13 @@ public class fire_weapon : MonoBehaviour
 
     public void fire()
     {
-        if (gameObject.name == "RocketLauncher")
+        if (gameObject.name == "RocketLauncher" || gameObject.name == "GrenadeLauncher")
         {
             var clone = Instantiate(bullet, bullet.transform.position, bullet.transform.rotation);
             clone.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             clone.SetActive(true);
             clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
-            Destroy(clone, 1.0f);
+            Destroy(clone, 3.0f);
 
         }
         // Represents the range of each weapon
