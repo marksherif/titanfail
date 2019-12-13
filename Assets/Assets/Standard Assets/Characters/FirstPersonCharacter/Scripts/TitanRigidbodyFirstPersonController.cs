@@ -101,6 +101,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool dash;
         private int dash_count = 3;
         private float health = 400;
+        private float time = 15.0f;
         public Image health_bar;
         public Image core_ability_meter_bar;
         public float coreAbilityMeter;
@@ -219,9 +220,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 if (dash_count > 0)
                     dash = true;
             }
-            if (CrossPlatformInputManager.GetButtonDown("TitanCore") && coreAbilityMeter == 100f && !core_deployed)
+            if (CrossPlatformInputManager.GetButtonDown("TitanCore") && coreAbilityMeter == 100f)
             {
-                //perform smart core
+                coreAbilityMeter = 0;
+                //PerformCore();
+
             }
             if (CrossPlatformInputManager.GetButtonDown("TitanEmbark")) //dis-embarking from titan
             {
@@ -234,6 +237,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 PlayerFPS.SetActive(true);
                 PlayerHUD.SetActive(true);
                 PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
+            }
+            if (!defensive_cooldown_over)
+            {
+                time -= Time.deltaTime;
             }
         }
 
@@ -281,6 +288,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             yield return new WaitForSeconds(time);
 
             defensive_cooldown_over = true;
+            time = 15.0f;
         }
 
 
@@ -445,6 +453,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jumping = false;
                 PlayLandingSound();
+            }
+        }
+        void PerformCore()
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10.0f);
+            int i = 0;
+            while (i < hitColliders.Length)
+            {
+                if (hitColliders[i].gameObject.CompareTag("EnemyTitan") || hitColliders[i].gameObject.CompareTag("EnemyPilot"))
+                {
+                    i = hitColliders.Length;
+                    //gameObject.transform.LookAt(hitColliders[i].gameObject.transform);
+                    //run script
+                    // script target = hitColliders[i].gameObject
+                }
             }
         }
     }
