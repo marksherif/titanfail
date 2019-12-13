@@ -10,6 +10,8 @@ public class enemy_script : MonoBehaviour
     public GameObject bullet;
     public Image health_bar;
     public GameObject explosion;
+    public GameObject myplayer;
+    public GameObject myPlayerTitan;
     private bool player_in_region;
     public float initial_enemy_health;
     public float health;
@@ -34,23 +36,42 @@ public class enemy_script : MonoBehaviour
             Destroy(collision.gameObject);
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             RigidbodyFirstPersonController playerScript = player.GetComponent<RigidbodyFirstPersonController>();
+            TitanRigidbodyFirstPersonController titanScript = player.GetComponent<TitanRigidbodyFirstPersonController>();
             if (health <= 0)
             {
-                if (gameObject.CompareTag("EnemyTitan") && living)
+                if (gameObject.CompareTag("EnemyTitan") && living && myplayer.activeSelf)
                 {
                     explosion.SetActive(true);
                     StartCoroutine(DestroyOnDying(0.5f));
                     playerScript.titanFallMeter += 50f;
+
                     living = false;
 
                 }
-                else if (gameObject.CompareTag("EnemyPilot"))
+                else if (gameObject.CompareTag("EnemyPilot") && myplayer.activeSelf)
                 {
                     Destroy(gameObject);
                     playerScript.titanFallMeter += 10f;
                 }
-                if (playerScript.titanFallMeter > 100)
+                else if (gameObject.CompareTag("EnemyPilot") && myPlayerTitan.activeSelf)
+                {
+                    Destroy(gameObject);
+                    titanScript.coreAbilityMeter+= 10f;
+                }
+                else if (gameObject.CompareTag("EnemyTitan") && living && myPlayerTitan.activeSelf)
+                {
+                    explosion.SetActive(true);
+                    StartCoroutine(DestroyOnDying(0.5f));
+                    titanScript.coreAbilityMeter+= 50f;
+
+                    living = false;
+
+                }
+                if (playerScript.titanFallMeter > 100 && myplayer.activeSelf)
                     playerScript.titanFallMeter = 100;
+
+                if (titanScript.coreAbilityMeter > 100 && myPlayerTitan.activeSelf)
+                    titanScript.coreAbilityMeter = 100;
             }
       
         }

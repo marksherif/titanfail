@@ -82,6 +82,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
         public Camera cam;
+        public GameObject PlayerFPS;
+        public GameObject PlayerHUD;
+        public GameObject TitanHUD;
+        public GameObject Titan;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
@@ -92,9 +96,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_YRotation;
         private Vector3 m_GroundContactNormal;
         private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
+        private bool core_deployed = false;
         private int jump_count = 0;
         private bool dash;
         private int dash_count = 3;
+        private float health = 400;
+        public Image health_bar;
+        public Image core_ability_meter_bar;
+        public float coreAbilityMeter;
 
         public Text dash_text;
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
@@ -181,12 +190,16 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
             mouseLook.Init(transform, cam.transform);
+            coreAbilityMeter = 0;                          // a playerTitan has an empty core ability meter
         }
 
 
         private void Update()
         {
             RotateView();
+            health_bar.fillAmount = health / 400f;
+
+            core_ability_meter_bar.fillAmount = coreAbilityMeter / 100f;
 
             dash_text.text = dash_count + "/3";
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
@@ -197,7 +210,48 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 if (dash_count>0)
                     dash = true;
             }
+            if (CrossPlatformInputManager.GetButtonDown("TitanCore") && coreAbilityMeter == 100f && !core_deployed)
+            {
+                //perform smart core
+            }
+            if (CrossPlatformInputManager.GetButtonDown("TitanEmbark")) //dis-embarking from titan
+            {
+                PlayerFPS.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
+                PlayerFPS.transform.rotation = transform.rotation;
+                var clone = Instantiate(Titan, new Vector3(transform.position.x, transform.position.y +10, transform.position.z -5), transform.rotation);
+                clone.SetActive(true);
+                gameObject.SetActive(false);
+                TitanHUD.SetActive(false);
+                PlayerFPS.SetActive(true);
+                PlayerHUD.SetActive(true);
+            }
+
+
         }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "EnemyBullet")
+            {
+                health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
+                Destroy(collision.gameObject);
+                StopAllCoroutines();
+
+                if (health <= 0)
+                {
+                    PlayerFPS.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 1, gameObject.transform.position.z);
+                    PlayerFPS.transform.rotation = gameObject.transform.rotation;
+                    gameObject.SetActive(false);
+                    TitanHUD.SetActive(false);
+                    PlayerFPS.SetActive(true);
+                    PlayerHUD.SetActive(true);
+                    PlayerFPS.GetComponent<RigidbodyFirstPersonController>().titan_deployed = false;
+
+                }
+
+            }
+        }
+
 
         IEnumerator RefillDash(float time)
         {
