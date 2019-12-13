@@ -262,6 +262,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 StartCoroutine(RefillHealth(1));
         }
 
+        public void startRefillAfterTitan()
+        {
+            StartCoroutine(RefillHealth(3.0f));
+        }
+
 
         private void FixedUpdate()
         {

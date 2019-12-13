@@ -224,9 +224,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 TitanHUD.SetActive(false);
                 PlayerFPS.SetActive(true);
                 PlayerHUD.SetActive(true);
+                PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
             }
-
-
         }
 
         private void OnCollisionEnter(Collision collision)
@@ -246,9 +245,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     PlayerFPS.SetActive(true);
                     PlayerHUD.SetActive(true);
                     PlayerFPS.GetComponent<RigidbodyFirstPersonController>().titan_deployed = false;
-
+                    PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
                 }
-
             }
         }
 
