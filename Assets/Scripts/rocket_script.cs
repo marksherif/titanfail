@@ -62,6 +62,7 @@ public class rocket_script : MonoBehaviour
                     if (hitColliders[i].gameObject.CompareTag("EnemyTitan"))
                     {
                         hitColliders[i].gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                        GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                         StartCoroutine(DestroyOnDying(0.5f, hitColliders[i].gameObject));
                         playerScript.titanFallMeter += 50;
 
@@ -69,6 +70,7 @@ public class rocket_script : MonoBehaviour
                     else
                     {
                         Destroy(hitColliders[i].gameObject);
+                        GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                         playerScript.titanFallMeter += 10;
                     }
                     if (playerScript.titanFallMeter > 100)

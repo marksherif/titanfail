@@ -22452,8 +22452,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 2079074992}
-  weapon1: {fileID: 2758691702889123958}
-  weapon2: {fileID: 7997884807711334762}
+  weapon1: {fileID: 633587612}
+  weapon2: {fileID: 2758691702889123958}
   Titan: {fileID: 8296172667996011540}
   movementSettings:
     ForwardSpeed: 8
@@ -22565,7 +22565,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702001780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 179.95, y: 341.03, z: -173.17}
+  m_LocalPosition: {x: 166.4, y: 341.03, z: -212.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1395663271}
@@ -47294,18 +47294,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1489169059}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2116591921}
-        m_MethodName: onStartFromLoadout
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1489169059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65310,6 +65299,7 @@ GameObject:
   - component: {fileID: 2116591917}
   - component: {fileID: 2116591921}
   - component: {fileID: 2116591922}
+  - component: {fileID: 2116591923}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -65410,7 +65400,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116591916}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e6ea98bd662c53e42b5a64a1f1af76d1, type: 3}
   m_Name: 
@@ -65436,6 +65426,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 685ce84aacf840448bd514b20ef72ca1, type: 3}
   primary_weapon_image: {fileID: 1705867739}
   heavy_weapon_image: {fileID: 229164461}
+  prim_weapon: 0
+  heavy_weapon: 0
 --- !u!82 &2116591922
 AudioSource:
   m_ObjectHideFlags: 0
@@ -65532,6 +65524,39 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2116591923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116591916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e09ee262da8559141bf832a3bfccc705, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  main_menu_panel: {fileID: 2086850616}
+  options_panel: {fileID: 463774267}
+  loadout_panel: {fileID: 1922831256}
+  pause_panel: {fileID: 917492376}
+  player_hud_panel: {fileID: 1789912204}
+  titan_hud_panel: {fileID: 1263133840}
+  game_over_panel: {fileID: 551271047}
+  player: {fileID: 702001780}
+  toggle: {fileID: 306824503}
+  volume_slider: {fileID: 1230142938}
+  main_menu_music: {fileID: 8300000, guid: 11854d2a7880947bbb15d0841d4b68fc, type: 3}
+  dead_enemies: 0
+  enemy_count: 17
+  primary_image_sprites:
+  - {fileID: 21300000, guid: f0f3bf957ade2c244b36c5ad4352045f, type: 3}
+  - {fileID: 21300000, guid: a16004078bc24a045936c0f4a65acd3a, type: 3}
+  heavy_weapon_sprites:
+  - {fileID: 21300000, guid: 29b5aa512dbe76541b1e56692b0423df, type: 3}
+  - {fileID: 21300000, guid: 685ce84aacf840448bd514b20ef72ca1, type: 3}
+  primary_weapon_image: {fileID: 1705867739}
+  heavy_weapon_image: {fileID: 229164461}
 --- !u!1 &2120555607
 GameObject:
   m_ObjectHideFlags: 0

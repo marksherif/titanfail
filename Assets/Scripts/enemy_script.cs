@@ -44,6 +44,7 @@ public class enemy_script : MonoBehaviour
                 if (gameObject.CompareTag("EnemyTitan") && living && myplayer.activeSelf)
                 {
                     explosion.SetActive(true);
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                     StartCoroutine(DestroyOnDying(0.5f));
                     playerScript.titanFallMeter += 50f;
 
@@ -52,17 +53,20 @@ public class enemy_script : MonoBehaviour
                 }
                 else if (gameObject.CompareTag("EnemyPilot") && myplayer.activeSelf)
                 {
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                     Destroy(gameObject);
                     playerScript.titanFallMeter += 10f;
                 }
                 else if (gameObject.CompareTag("EnemyPilot") && myPlayerTitan.activeSelf)
                 {
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                     Destroy(gameObject);
                     titanScript.coreAbilityMeter+= 10f;
                 }
                 else if (gameObject.CompareTag("EnemyTitan") && living && myPlayerTitan.activeSelf)
                 {
                     explosion.SetActive(true);
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().dead_enemies++;
                     StartCoroutine(DestroyOnDying(0.5f));
                     titanScript.coreAbilityMeter+= 50f;
 

@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/ParkourScene.unity
+    guid: 953c1e62c6c1e9d44ade6f73ea01270c
+  - enabled: 1
+    path: Assets/Scenes/Shotgun_rocket.unity
+    guid: 754aa2eb2e69a834593378c8b372dd9f
+  - enabled: 1
+    path: Assets/Scenes/Shotgun_grenade.unity
+    guid: f4809003324b6044daf49e2f43f5865e
+  - enabled: 1
+    path: Assets/Scenes/AR_rocket.unity
+    guid: 31c33c758f7cc9148ac448dcd829ced9
+  - enabled: 1
+    path: Assets/Scenes/AR_grenade.unity
+    guid: bf7ba76c23047e241acd79c23506c7cd
   m_configObjects: {}
