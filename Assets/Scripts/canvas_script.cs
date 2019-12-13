@@ -59,7 +59,10 @@ public class canvas_script : MonoBehaviour
             onPause();
         }
        
-       
+       if (player.transform.position.y < 335)
+        {
+            OnGameOver();
+        }
            
         
     }
@@ -151,6 +154,10 @@ public class canvas_script : MonoBehaviour
        
     }
 
+    public void onRestart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
     public void onMainMenuFromPause()
     {
@@ -163,6 +170,7 @@ public class canvas_script : MonoBehaviour
 
     public void OnGameOver()
     {
+        player.GetComponent<RigidbodyFirstPersonController>().mouseLook.SetCursorLock(false);
         game_over_panel.SetActive(true);
         player_hud_panel.SetActive(false);
         titan_hud_panel.SetActive(false);
