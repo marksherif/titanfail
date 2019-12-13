@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityStandardAssets.Characters.FirstPerson;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class canvas_script : MonoBehaviour
+public class canvas_script_shot_grenade : MonoBehaviour
 {
     public GameObject main_menu_panel;
     public GameObject options_panel;
@@ -37,22 +37,16 @@ public class canvas_script : MonoBehaviour
     private bool toggle_primary_image = false;
     private bool toggle_heavy_image = false;
 
-    public int prim_weapon=0;
-    public int heavy_weapon=0;
-
     // Start is called before the first frame update
     void Start()
     {
-        player.GetComponent<RigidbodyFirstPersonController>().mouseLook.SetCursorLock(false);
+        player.GetComponent<RigidbodyFirstPersonController>().mouseLook.SetCursorLock(true);
         primary_weapon_image.sprite = primary_image_sprites[0];
         heavy_weapon_image.sprite = heavy_weapon_sprites[0];
-        Time.timeScale = 0f;
-        main_menu_panel.SetActive(true);
-        main_menu_audio_source = GetComponent<AudioSource>();
-        if (toggle.isOn)
-        {
-            main_menu_audio_source.PlayOneShot(main_menu_music);
-        }
+
+        player_hud_panel.SetActive(true);
+        Time.timeScale = 1f;
+        main_menu_audio_source.Stop();
         event_system = FindObjectOfType<EventSystem>();
     }
 
@@ -109,26 +103,26 @@ public class canvas_script : MonoBehaviour
 
     public void onStartFromLoadout()
     {
-        if(toggle_primary_image && toggle_heavy_image)
-        {
-            print("shotgun grenade");
-            SceneManager.LoadScene("Shotgun_grenade");
-        }
-        if (toggle_primary_image && !toggle_heavy_image)
-        {
-            print("Shotgun rocket");
-            SceneManager.LoadScene("Shotgun_rocket");
+        loadout_panel.SetActive(false);
+        player_hud_panel.SetActive(true);
+        Time.timeScale = 1f;
+        main_menu_audio_source.Stop();
 
-        }
-        if (!toggle_primary_image && toggle_heavy_image)
+        if(toggle_primary_image && heavy_weapon_image)
         {
-            print("ar grenade");
-            SceneManager.LoadScene("AR_grenade");
+            // ar rocket
         }
-        if(!toggle_primary_image && !toggle_heavy_image)
+        else if (toggle_primary_image && !heavy_weapon_image)
         {
-            print("AR rocket");
-            SceneManager.LoadScene("AR_rocket");
+            // ar grenade
+        }
+        else if (!toggle_primary_image && !heavy_weapon_image)
+        {
+            // shotgun grenade
+        }
+        else
+        {
+            // ar grenade
         }
     }
 
@@ -137,7 +131,7 @@ public class canvas_script : MonoBehaviour
         
         player.GetComponent<RigidbodyFirstPersonController>().mouseLook.SetCursorLock(false);
         //event_system.currentInputModule()
-        event_system.UpdateModules();
+        //event_system.UpdateModules();
         pause_panel.SetActive(true);
         if (player_hud_panel.activeSelf)
             player_hud_before_pause = true;
