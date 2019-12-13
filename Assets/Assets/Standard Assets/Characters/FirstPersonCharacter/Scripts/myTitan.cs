@@ -9,6 +9,8 @@ public class myTitan : MonoBehaviour
    // public Text embark_text;
     public GameObject TitanFPS;
     public GameObject PlayerFPS;
+    public GameObject PlayerHUD;
+    public GameObject TitanHUD;
 
     public Text embark_text;
     private bool can_embark;
@@ -34,7 +36,9 @@ public class myTitan : MonoBehaviour
             TitanFPS.transform.rotation = gameObject.transform.rotation;
             Destroy(gameObject);
             PlayerFPS.SetActive(false);
+            PlayerHUD.SetActive(false);
             TitanFPS.SetActive(true);
+            TitanHUD.SetActive(true);
         }
     }
 

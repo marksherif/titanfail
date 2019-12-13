@@ -84,6 +84,14 @@ public class fire_weapon : MonoBehaviour
             clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
             Destroy(clone, 0.2f);
         }
+
+        if (gameObject.name == "Predator Cannon")
+        {
+            var clone = Instantiate(bullet, transform.position, transform.rotation);
+            clone.SetActive(true);
+            clone.GetComponent<Rigidbody>().AddForce(clone.transform.forward * 1000);
+            Destroy(clone, 0.2f);
+        }
     }
 
     public void fireAnimationEnded()

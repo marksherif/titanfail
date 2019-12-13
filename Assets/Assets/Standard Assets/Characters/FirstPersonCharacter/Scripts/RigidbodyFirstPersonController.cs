@@ -98,7 +98,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Vector3 m_GroundContactNormal;
         private bool m_Jump,m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
         private bool m_changeWeaponValue = true;
-        private bool titan_deployed = false;
+        public bool titan_deployed = false;
         private int jump_count = 0;
         private float health = 100;
         public Image health_bar;
