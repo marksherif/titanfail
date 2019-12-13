@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 {
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(CapsuleCollider))]
-    public class TitanRigidbodyFirstPersonController : MonoBehaviour
+    public class RigidbodyFirstPersonControllerParkour : MonoBehaviour
     {
         [Serializable]
         public class MovementSettings
@@ -47,9 +47,10 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     CurrentTargetSpeed = ForwardSpeed;
                 }
 #if !MOBILE_INPUT
-                if (Input.GetKey(RunKey))
+                if (Input.GetKey(RunKey) && !Input.GetKey(KeyCode.C))
                 {
                     CurrentTargetSpeed *= RunMultiplier;
+                    anim.SetBool("Crouch", false);
                     m_Running = true;
                 }
                 else
@@ -82,13 +83,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
 
         public Camera cam;
-        public GameObject PlayerFPS;
-        public GameObject PlayerHUD;
-        public GameObject TitanHUD;
+        public GameObject weapon1;
+        public GameObject weapon2;
         public GameObject Titan;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
+
 
 
         private Rigidbody m_RigidBody;
@@ -96,27 +97,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_YRotation;
         private Vector3 m_GroundContactNormal;
         private bool m_Jump, m_PreviouslyGrounded, m_Jumping, m_IsGrounded;
-        private bool core_deployed = false;
+        private bool m_changeWeaponValue = true;
+        public bool titan_deployed = false;
         private int jump_count = 0;
-        private bool dash;
-        private int dash_count = 3;
-        private float health = 400;
-        private float time = 15.0f;
+        private float health = 100;
         public Image health_bar;
-        public Image core_ability_meter_bar;
-        public float coreAbilityMeter;
+        public Image titan_fall_meter_bar;
+        public float titanFallMeter;
 
-        public Text dash_text;
         [SerializeField] public AudioClip[] m_FootstepSounds;    // an array of footstep sounds that will be randomly selected from.
-        [SerializeField] public AudioClip m_Dash;           // the sound played when character leaves the ground.
+        [SerializeField] public AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] public AudioClip m_LandSound;           // the sound played when character touches back on ground.
+        [SerializeField] public AudioClip m_ChangeWeaponSound;   // the sound played when character toggles between 2 weapons.
         public AudioSource m_AudioSource1;
         public AudioSource m_AudioSource2;
-
-        private bool defensive_enabled = false;
-        private bool defensive_cooldown_over = true;
-
-        public Text timer_text;
 
         private void PlayLandingSound()
         {
@@ -125,9 +119,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             //m_NextStep = m_StepCycle + .5f;
         }
 
-        private void PlayDashSound()
+        private void PlayJumpSound()
         {
-            m_AudioSource1.clip = m_Dash;
+            m_AudioSource1.clip = m_JumpSound;
             m_AudioSource1.Play();
         }
 
@@ -196,110 +190,81 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
             mouseLook.Init(transform, cam.transform);
-            coreAbilityMeter = 0;                          // a playerTitan has an empty core ability meter
+            titanFallMeter = 0;                          //a player intially has an empty titanfall meter
+            weapon1.SetActive(true);
         }
 
 
         private void Update()
         {
             RotateView();
-            health_bar.fillAmount = health / 400f;
 
-            core_ability_meter_bar.fillAmount = coreAbilityMeter / 100f;
+            health_bar.fillAmount = health / 100f;
 
-            dash_text.text = dash_count + "/3";
-            timer_text.text = (int)time + "";
+            titan_fall_meter_bar.fillAmount = titanFallMeter / 100f;
 
-            if ((CrossPlatformInputManager.GetButtonDown("TitanDefensiveAbility") && defensive_cooldown_over))
-            {
-                defensive_enabled = true;
-                StartCoroutine(disableDefensiveAbility(10.0f));
-            }
+
+
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
-                // Instead of changing all the logic behind the jump (since titans dont jump) i'll just set the m_jump
-                // to false and my new var "dash" to true
-                m_Jump = false;
-                if (dash_count > 0)
-                    dash = true;
+                m_Jump = true;
             }
-            if (CrossPlatformInputManager.GetButtonDown("TitanCore") && coreAbilityMeter == 100f)
-            {
-                coreAbilityMeter = 0;
-                //PerformCore();
 
-            }
-            if (CrossPlatformInputManager.GetButtonDown("TitanEmbark")) //dis-embarking from titan
+
+            if (CrossPlatformInputManager.GetButtonDown("ChangeWeapon"))
             {
-                PlayerFPS.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
-                PlayerFPS.transform.rotation = transform.rotation;
-                var clone = Instantiate(Titan, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z - 5), transform.rotation);
+                m_changeWeaponValue = !m_changeWeaponValue;
+                weapon1.SetActive(m_changeWeaponValue);
+                weapon2.SetActive(!m_changeWeaponValue);
+                weapon1.transform.localRotation = Quaternion.identity;
+                weapon2.transform.localRotation = Quaternion.identity;
+                m_AudioSource1.clip = m_ChangeWeaponSound;
+                m_AudioSource1.Play();
+            }
+
+            if (CrossPlatformInputManager.GetButtonDown("TitanFall") && titanFallMeter == 100f && !titan_deployed)
+            {
+                var intial_titan_height = transform.position.y + 10;
+                var z = transform.position.z + 5;
+                var clone = Instantiate(Titan, new Vector3(transform.position.x, intial_titan_height, z), transform.rotation);
                 clone.SetActive(true);
-                gameObject.SetActive(false);
-                TitanHUD.SetActive(false);
-                PlayerFPS.SetActive(true);
-                PlayerHUD.SetActive(true);
-                PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
+                titan_deployed = true;
+                titanFallMeter = 0;
             }
-            if (!defensive_cooldown_over)
-            {
-                time -= Time.deltaTime;
-            }
+
+
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag == "EnemyBullet")
             {
-                if (!defensive_enabled)
+                health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
+                Destroy(collision.gameObject);
+                StopAllCoroutines();
+                StartCoroutine(RefillHealth(3));
+
+                if (health <= 0)
                 {
-
-                    health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
-                    Destroy(collision.gameObject);
-
-                    if (health <= 0)
-                    {
-                        PlayerFPS.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 1, gameObject.transform.position.z);
-                        PlayerFPS.transform.rotation = gameObject.transform.rotation;
-                        gameObject.SetActive(false);
-                        TitanHUD.SetActive(false);
-                        PlayerFPS.SetActive(true);
-                        PlayerHUD.SetActive(true);
-                        PlayerFPS.GetComponent<RigidbodyFirstPersonController>().titan_deployed = false;
-                        PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
-                    }
+                    GameObject.Find("Canvas").GetComponent<canvas_script>().OnGameOver();
                 }
+
             }
         }
 
-        IEnumerator disableDefensiveAbility(float time)
+        IEnumerator RefillHealth(float time)
         {
             yield return new WaitForSeconds(time);
-
-            defensive_enabled = false;
-            defensive_cooldown_over = false;
-            callCooldown();
+            health += 5;
+            if (health >= 100)
+                health = 100;
+            else
+                StartCoroutine(RefillHealth(1));
         }
 
-        public void callCooldown()
+        public void startRefillAfterTitan()
         {
-            StartCoroutine(defensiveAbilityCooldown(15.0f));
-        }
-
-        IEnumerator defensiveAbilityCooldown(float time)
-        {
-            yield return new WaitForSeconds(time);
-
-            defensive_cooldown_over = true;
-            this.time = 15.0f;
-        }
-
-
-        IEnumerator RefillDash(float time)
-        {
-            yield return new WaitForSeconds(time);
-
-            dash_count += 1;
+            StartCoroutine(RefillHealth(3.0f));
         }
 
 
@@ -326,16 +291,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     if (!m_AudioSource2.isPlaying && movementSettings.Running)
                         PlayFootStepAudio2();
                 }
-                if (dash)
-                {
-                    dash_count -= 1;
-                    m_RigidBody.AddForce(desiredMove * SlopeMultiplier()*70, ForceMode.Impulse);
-                    PlayDashSound();
-                    if (dash_count == 0)
-                    {
-                        StartCoroutine(RefillDash(5));
-                    }
-                }
             }
 
             if (m_IsGrounded)
@@ -350,7 +305,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
                     m_Jumping = true;
                     jump_count += 1;
-                    PlayDashSound();
+                    PlayJumpSound();
                 }
 
                 if (!m_Jumping && Mathf.Abs(input.x) < float.Epsilon && Mathf.Abs(input.y) < float.Epsilon && m_RigidBody.velocity.magnitude < 1f)
@@ -367,7 +322,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     m_RigidBody.AddForce(new Vector3(0f, movementSettings.JumpForce, 0f), ForceMode.Impulse);
                     m_Jumping = true;
                     jump_count += 1;
-                    PlayDashSound();
+                    PlayJumpSound();
                 }
                 else
                 {
@@ -379,7 +334,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 }
             }
             m_Jump = false;
-            dash = false;
         }
 
 
@@ -456,21 +410,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Jumping = false;
                 PlayLandingSound();
-            }
-        }
-        void PerformCore()
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, 10.0f);
-            int i = 0;
-            while (i < hitColliders.Length)
-            {
-                if (hitColliders[i].gameObject.CompareTag("EnemyTitan") || hitColliders[i].gameObject.CompareTag("EnemyPilot"))
-                {
-                    i = hitColliders.Length;
-                    //gameObject.transform.LookAt(hitColliders[i].gameObject.transform);
-                    //run script
-                    // script target = hitColliders[i].gameObject
-                }
             }
         }
     }
