@@ -4247,8 +4247,7 @@ MonoBehaviour:
   m_LandSound: {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
   m_AudioSource1: {fileID: 512171589}
   m_AudioSource2: {fileID: 512171588}
-  defensive_enabled: 0
-  defensive_cooldown_over: 1
+  timer_text: {fileID: 1355795069}
 --- !u!136 &512171592
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10646,7 +10645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1263133841
 RectTransform:
   m_ObjectHideFlags: 0

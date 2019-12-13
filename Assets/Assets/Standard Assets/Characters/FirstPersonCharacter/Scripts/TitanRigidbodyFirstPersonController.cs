@@ -116,6 +116,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool defensive_enabled = false;
         private bool defensive_cooldown_over = true;
 
+        public Text timer_text;
+
         private void PlayLandingSound()
         {
             m_AudioSource1.clip = m_LandSound;
@@ -206,6 +208,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             core_ability_meter_bar.fillAmount = coreAbilityMeter / 100f;
 
             dash_text.text = dash_count + "/3";
+            timer_text.text = (int)time + "";
 
             if ((CrossPlatformInputManager.GetButtonDown("TitanDefensiveAbility") && defensive_cooldown_over))
             {
@@ -288,7 +291,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             yield return new WaitForSeconds(time);
 
             defensive_cooldown_over = true;
-            time = 15.0f;
+            this.time = 15.0f;
         }
 
 
