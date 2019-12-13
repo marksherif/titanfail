@@ -14,6 +14,8 @@ public class enemy_script : MonoBehaviour
     public float initial_enemy_health;
     public float health;
     private bool living = true;
+    public Animator anim;
+
 
     void Start()
     {
@@ -60,6 +62,7 @@ public class enemy_script : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
+            anim.SetBool("player_near", true);
             Component[] components = gameObject.GetComponents(typeof(Component));
             Behaviour castedToBehaviour = components[5] as Behaviour;
             castedToBehaviour.enabled = true;
@@ -73,6 +76,7 @@ public class enemy_script : MonoBehaviour
     {
         if (collider.tag == "Player")
         {
+            anim.SetBool("player_near", false);
             Component[] components = gameObject.GetComponents(typeof(Component));
             Behaviour castedToBehaviour = components[5] as Behaviour;
             castedToBehaviour.enabled = false;

@@ -27,10 +27,20 @@ public class canvas_script : MonoBehaviour
     private EventSystem event_system;
     private AudioSource main_menu_audio_source;
 
+    public Sprite[] primary_image_sprites;
+    public Sprite[] heavy_weapon_sprites;
+
+    public Image primary_weapon_image;
+    public Image heavy_weapon_image;
+
+    private bool toggle_primary_image = false;
+    private bool toggle_heavy_image = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        primary_weapon_image.sprite = primary_image_sprites[0];
+        heavy_weapon_image.sprite = heavy_weapon_sprites[0];
         Time.timeScale = 0f;
         main_menu_panel.SetActive(true);
         main_menu_audio_source = GetComponent<AudioSource>();
@@ -64,13 +74,29 @@ public class canvas_script : MonoBehaviour
             main_menu_audio_source.Stop();
     }
 
+    public void onNextPrimaryWeapon()
+    {
+        if (toggle_primary_image)
+            primary_weapon_image.sprite = primary_image_sprites[0];
+        else
+            primary_weapon_image.sprite = primary_image_sprites[1];
+        toggle_primary_image = !toggle_primary_image;
+    }
+
+    public void onNextHeavyWeapon()
+    {
+        if (toggle_heavy_image)
+            heavy_weapon_image.sprite = heavy_weapon_sprites[0];
+        else
+            heavy_weapon_image.sprite = heavy_weapon_sprites[1];
+        toggle_heavy_image = !toggle_heavy_image;
+    }
+
     public void onStart()
     {
-        // TODO Uncomment this when loadout panel and logic are implemented
-        // loadout_panel.SetActive(true);
-        // TODO Remove the player hud when correct logic is implemented
-        player_hud_panel.SetActive(true);
+        //loadout_panel.SetActive(true);
         main_menu_panel.SetActive(false);
+        player_hud_panel.SetActive(true);
         Time.timeScale = 1f;
         main_menu_audio_source.Stop();
     }
