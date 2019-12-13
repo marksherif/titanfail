@@ -112,6 +112,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public AudioSource m_AudioSource1;
         public AudioSource m_AudioSource2;
 
+        private bool defensive_enabled = false;
+        private bool defensive_cooldown_over = true;
+
         private void PlayLandingSound()
         {
             m_AudioSource1.clip = m_LandSound;
@@ -202,12 +205,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
             core_ability_meter_bar.fillAmount = coreAbilityMeter / 100f;
 
             dash_text.text = dash_count + "/3";
+
+            if ((CrossPlatformInputManager.GetButtonDown("TitanDefensiveAbility") && defensive_cooldown_over))
+            {
+                defensive_enabled = true;
+                StartCoroutine(disableDefensiveAbility(10.0f));
+            }
             if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             {
                 // Instead of changing all the logic behind the jump (since titans dont jump) i'll just set the m_jump
                 // to false and my new var "dash" to true
                 m_Jump = false;
-                if (dash_count>0)
+                if (dash_count > 0)
                     dash = true;
             }
             if (CrossPlatformInputManager.GetButtonDown("TitanCore") && coreAbilityMeter == 100f && !core_deployed)
@@ -218,7 +227,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 PlayerFPS.transform.position = new Vector3(transform.position.x, transform.position.y - 1, transform.position.z);
                 PlayerFPS.transform.rotation = transform.rotation;
-                var clone = Instantiate(Titan, new Vector3(transform.position.x, transform.position.y +10, transform.position.z -5), transform.rotation);
+                var clone = Instantiate(Titan, new Vector3(transform.position.x, transform.position.y + 10, transform.position.z - 5), transform.rotation);
                 clone.SetActive(true);
                 gameObject.SetActive(false);
                 TitanHUD.SetActive(false);
@@ -232,22 +241,46 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             if (collision.gameObject.tag == "EnemyBullet")
             {
-                health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
-                Destroy(collision.gameObject);
-                StopAllCoroutines();
-
-                if (health <= 0)
+                if (!defensive_enabled)
                 {
-                    PlayerFPS.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 1, gameObject.transform.position.z);
-                    PlayerFPS.transform.rotation = gameObject.transform.rotation;
-                    gameObject.SetActive(false);
-                    TitanHUD.SetActive(false);
-                    PlayerFPS.SetActive(true);
-                    PlayerHUD.SetActive(true);
-                    PlayerFPS.GetComponent<RigidbodyFirstPersonController>().titan_deployed = false;
-                    PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
+
+                    health -= collision.gameObject.GetComponent<bullet_hit>().bullet_damage;
+                    Destroy(collision.gameObject);
+
+                    if (health <= 0)
+                    {
+                        PlayerFPS.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - 1, gameObject.transform.position.z);
+                        PlayerFPS.transform.rotation = gameObject.transform.rotation;
+                        gameObject.SetActive(false);
+                        TitanHUD.SetActive(false);
+                        PlayerFPS.SetActive(true);
+                        PlayerHUD.SetActive(true);
+                        PlayerFPS.GetComponent<RigidbodyFirstPersonController>().titan_deployed = false;
+                        PlayerFPS.GetComponent<RigidbodyFirstPersonController>().startRefillAfterTitan();
+                    }
                 }
             }
+        }
+
+        IEnumerator disableDefensiveAbility(float time)
+        {
+            yield return new WaitForSeconds(time);
+
+            defensive_enabled = false;
+            defensive_cooldown_over = false;
+            callCooldown();
+        }
+
+        public void callCooldown()
+        {
+            StartCoroutine(defensiveAbilityCooldown(15.0f));
+        }
+
+        IEnumerator defensiveAbilityCooldown(float time)
+        {
+            yield return new WaitForSeconds(time);
+
+            defensive_cooldown_over = true;
         }
 
 
