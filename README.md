@@ -26,7 +26,7 @@ Go to https://github.com/marksherif/titanfail and create a new pull request and 
 1) Switch to Visible Meta Files in Edit → Project Settings → Editor → Version Control Mode
 2) Switch to Force Text in Edit → Project Settings → Editor → Asset Serialization Mode
 
-# Running the shit
+# Running everything
 After importing everything go to the scenes folder and double click the sample scene
 
 # Credits
